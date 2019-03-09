@@ -10,9 +10,9 @@ Pure JavaScript plugin for animating placeholders on input elements
 ### API
 Calling a new instance of the typewriter:
 ```
-new Typewriter('#zipcodeInput', ['Input Your Zip Code', 'eg. 93108'], {writeDelay: 200});
+new TypeWriter('#zipcodeInput', ['Input Your Zip Code', 'eg. 93108'], {writeDelay: 200});
 ```
-The ``` new Typewriter ``` accepts three arguments
+The ``` new TypeWriter ``` accepts three arguments
 1. A querySelector to select the input field
 2. An array of strings to be typed out in the selected input field
 3. An options settings object to overwrite default settings
@@ -26,3 +26,5 @@ The ``` new Typewriter ``` accepts three arguments
 --expecting a number of miliseconds
 - holdOnceDeleted => Delay once the current phrase has been fully deleted (default: 1000ms)                                                              
 --expecting a number of miliseconds
+- stopAfterOnce => Runs through the phrases only once, then leaves the first phrase as a static placeholder                                                              
+--expecting a boolean 
