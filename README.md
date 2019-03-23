@@ -1,4 +1,5 @@
 # Placeholder-Typewriter
+## Preview: https://bornasepic.me/placeholder-typewriter/
 Pure JavaScript plugin for animating placeholders on input elements
 
 ### How to use:
