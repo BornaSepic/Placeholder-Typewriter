@@ -1,0 +1,28 @@
+{
+  "name": "placeholder-typewriter",
+  "version": "1.0.0",
+  "description": "Pure JavaScript plugin for animating placeholders on input elements",
+  "main": "typewriter.js",
+  "dependencies": {},
+  "devDependencies": {
+    "server-lite": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BornaSepic/Placeholder-Typewriter.git"
+  },
+  "keywords": [
+    "Placeholder",
+    "Animate",
+    "Typewriter"
+  ],
+  "author": "Borna Sepic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BornaSepic/Placeholder-Typewriter/issues"
+  },
+  "homepage": "https://github.com/BornaSepic/Placeholder-Typewriter#readme"
+}
