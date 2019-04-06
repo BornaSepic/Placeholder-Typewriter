@@ -14,7 +14,6 @@ interface CustomSettings {
   stopAfterOnce?: boolean;
 }
 
-
 //default settings
 const typewriterSettings: DefaultSettings = {
   writeDelay: 80,
@@ -24,27 +23,45 @@ const typewriterSettings: DefaultSettings = {
   stopAfterOnce: false
 };
 
-
 class TypewriterProps {
-  protected settings: CustomSettings;
+  protected settings: DefaultSettings;
   protected element: HTMLElement;
   protected phrases: string[];
+  private phrasesLength: number = 0;
   protected currentPhrase: number = 0;
-  
+
   constructor(selector: string, phrases: string[], settings: CustomSettings) {
-    this.settings = settings;
-    this.element = document.querySelector('#zipcodeInput') as HTMLElement;
+    this.settings = { ...typewriterSettings, ...(settings || {}) };
+    this.element = document.querySelector(selector) as HTMLElement;
     this.phrases = phrases;
+    this.phrasesLength = phrases.length;
   }
+
+  protected updateCurrentPhrase: () => void = () => {
+    this.currentPhrase === this.phrasesLength - 1
+      ? this.resetPhrases()
+      : this.nextPhrase();
+  };
+  private resetPhrases: () => void = () => {
+    this.currentPhrase = 0;
+  };
+  private nextPhrase: () => void = () => {
+    this.currentPhrase++;
+  };
 }
 
-function TypeWriter(selector, phrases, settings) {
-  this.settings = Object.assign({}, typewriterSettings, settings);
-  this.element = document.querySelector(selector);
-  this.phrases = phrases;
-  this.currentPhrase = 0;
-  this.write = () => {
-    this.element.setAttribute('placeholder', '');
+class TypeWriter extends TypewriterProps {
+  constructor(
+    selector: string,
+    phrases: string[],
+    settings: CustomSettings = {}
+  ) {
+    super(selector, phrases, settings);
+    this.write();
+  }
+
+  public write: () => void = () => {
+    this.element.setAttribute("placeholder", "");
     this.phrases[this.currentPhrase].split("").forEach((letter, index) => {
       setTimeout(() => {
         this.element.setAttribute(
@@ -58,34 +75,38 @@ function TypeWriter(selector, phrases, settings) {
         }
       }, this.settings.writeDelay * index);
     });
-  },
-    this.remove = () => {
-      let currentWrittenPhrase = this.phrases[this.currentPhrase];
-      for (let letterIndex = 0; letterIndex < currentWrittenPhrase.length; letterIndex++) {
-        setTimeout(() => {
-          this.element.setAttribute(
-            "placeholder",
-            this.element.getAttribute("placeholder").slice(0, -1)
-          );
-          if (letterIndex === currentWrittenPhrase.length - 1) {
-            setTimeout(() => {
-              this.newPhrase();
-            }, this.settings.holdOnceDeleted);
-          }
-        }, this.settings.deleteDelay * letterIndex);
-      }
-    },
-    this.newPhrase = () => {
-      this.currentPhrase++;
-      if (this.currentPhrase === this.phrases.length) {
-        this.currentPhrase = 0;
-        if (this.settings.stopAfterOnce) {
-          this.element.setAttribute("placeholder", this.phrases[0]);
-          return
-        }
-      }
-      this.write();
-    };
-  this.write();
-}
+  };
 
+  protected remove: () => void = () => {
+    let currentWrittenPhrase: string = this.phrases[this.currentPhrase];
+    for (
+      let letterIndex = 0;
+      letterIndex < currentWrittenPhrase.length;
+      letterIndex++
+    ) {
+      setTimeout(() => {
+        this.element.setAttribute(
+          "placeholder",
+          this.element.getAttribute("placeholder")!.slice(0, -1)
+        );
+        if (letterIndex === currentWrittenPhrase.length - 1) {
+          setTimeout(() => {
+            this.newPhrase();
+          }, this.settings.holdOnceDeleted);
+        }
+      }, this.settings.deleteDelay * letterIndex);
+    }
+  };
+
+  protected newPhrase: () => void = () => {
+    this.currentPhrase++;
+    if (this.currentPhrase === this.phrases.length) {
+      this.currentPhrase = 0;
+      if (this.settings.stopAfterOnce) {
+        this.element.setAttribute("placeholder", this.phrases[0]);
+        return;
+      }
+    }
+    this.write();
+  };
+}
